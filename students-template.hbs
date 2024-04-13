@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Major</th>
+            <th>Midterm Score</th>
+            <th>Final Exam Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each students}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{major}}</td>
+            <td>{{midterm}}</td>
+            <td>{{final}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
