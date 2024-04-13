@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Data</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+</head>
+<body>
+    <h1>Student Data</h1>
+    <button id="citButton">CIT Students</button>
+    <button id="busButton">BUS Students</button>
+    <div id="studentTable"></div>
+
+    <script id="studentTemplate" type="text/x-handlebars-template">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Major</th>
+                    <th>Midterm</th>
+                    <th>Final</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each students}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{major}}</td>
+                    <td>{{midterm}}</td>
+                    <td>{{final}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+    <script>
+       $(document).ready(function() {
+    var allStudents;
+
+    $.ajax({
+        url: 'cit5students.json',
+        dataType: 'json',
+        success: function(data) {
+            allStudents = data;
+            renderTable(allStudents);
+        }
+    });
+
+    $('#citButton').on('click', function() {
+        var citStudents = allStudents.filter(function(student) {
+            return student.major === 'CIT';
+        });
+        renderTable(citStudents, 'CIT Students');
+    });
+
+    $('#busButton').on('click', function() {
+        var busStudents = allStudents.filter(function(student) {
+            return student.major === 'BUS';
+        });
+        renderTable(busStudents, 'BUS Students');
+    });
+
+    function renderTable(data, title) {
+        var source = $('#studentTemplate').html();
+        var template = Handlebars.compile(source);
+        var context = { students: data };
+        var html = template(context);
+        var section = $('<div>').addClass('student-section');
+        section.append('<h2>' + title + '</h2>');
+        section.append('<table>' + html + '</table>');
+        $('#studentTable').append(section);
+    }
+});
+    </script>
+</body>
+</html>
